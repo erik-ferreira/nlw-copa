@@ -27,9 +27,8 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <Center flex={1} bgColor="gray.900">
-        {!fontsLoaded ? <Loading /> : <SignIn />}
-      </Center>
+
+      {!fontsLoaded ? <Loading /> : <SignIn />}
     </NativeBaseProvider>
   );
 }
