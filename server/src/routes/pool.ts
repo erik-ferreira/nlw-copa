@@ -54,7 +54,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/pools/join",
     {
-      onRequest: authenticate,
+      onRequest: [authenticate],
     },
     async (request, reply) => {
       const joinPoolBody = zod.object({
@@ -116,7 +116,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/pools",
     {
-      onRequest: authenticate,
+      onRequest: [authenticate],
     },
     async (request) => {
       const pools = await prisma.pool.findMany({
@@ -159,7 +159,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/pools/:id",
     {
-      onRequest: authenticate,
+      onRequest: [authenticate],
     },
     async (request) => {
       const getPoolParams = zod.object({
