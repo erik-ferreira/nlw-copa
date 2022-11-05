@@ -1,5 +1,5 @@
-import { StyleSheet, StatusBar } from "react-native";
-import { Center, NativeBaseProvider } from "native-base";
+import { StatusBar } from "react-native";
+import { NativeBaseProvider } from "native-base";
 import {
   useFonts,
   Roboto_400Regular,
@@ -9,6 +9,7 @@ import {
 
 import { SignIn } from "./src/pages/SignIn";
 
+import { AppProvider } from "./src/components";
 import { Loading } from "./src/components/Loading";
 
 import { theme } from "./src/styles/theme";
@@ -27,17 +28,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-
-      {!fontsLoaded ? <Loading /> : <SignIn />}
+      <AppProvider>{!fontsLoaded ? <Loading /> : <SignIn />}</AppProvider>
     </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
