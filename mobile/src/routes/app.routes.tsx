@@ -8,7 +8,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 import { New } from "../pages/New";
 import { Find } from "../pages/Find";
 import { Pools } from "../pages/Pools";
-import { SignIn } from "../pages/SignIn";
+import { Details } from "../pages/Details";
 
 export function AppRoutes() {
   const { colors, sizes } = useTheme();
@@ -57,6 +57,11 @@ export function AppRoutes() {
       <Screen
         name="find"
         component={Find}
+        options={{ tabBarButton: () => null }}
+      />
+      <Screen
+        name="details"
+        component={Details}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>

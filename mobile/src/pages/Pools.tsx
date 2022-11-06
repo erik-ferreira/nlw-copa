@@ -9,14 +9,14 @@ import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { Loading } from "../components/Loading";
 import { EmptyPoolList } from "../components/EmptyPoolList";
-import { PoolCard, PoolCardPros } from "../components/PoolCard";
+import { PoolCard, PoolCardProps } from "../components/PoolCard";
 
 export function Pools() {
   const toast = useToast();
   const navigation = useNavigation();
 
   const [isLoadingPools, setIsLoadingPools] = useState(false);
-  const [pools, setPools] = useState<PoolCardPros[]>([]);
+  const [pools, setPools] = useState<PoolCardProps[]>([]);
 
   async function getPools() {
     try {
@@ -70,7 +70,12 @@ export function Pools() {
         <FlatList
           data={pools}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PoolCard data={item} />}
+          renderItem={({ item }) => (
+            <PoolCard
+              data={item}
+              onPress={() => navigation.navigate("details", { id: item.id })}
+            />
+          )}
           ListEmptyComponent={() => <EmptyPoolList />}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ pb: "24" }}
