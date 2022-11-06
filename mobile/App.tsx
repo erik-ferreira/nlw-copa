@@ -7,13 +7,10 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 
-import { New } from "./src/pages/New";
-import { Find } from "./src/pages/Find";
-import { Pools } from "./src/pages/Pools";
-import { SignIn } from "./src/pages/SignIn";
-
 import { AppProvider } from "./src/components";
 import { Loading } from "./src/components/Loading";
+
+import { Routes } from "./src/routes/index.routes";
 
 import { theme } from "./src/styles/theme";
 
@@ -31,7 +28,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <AppProvider>{!fontsLoaded ? <Loading /> : <SignIn />}</AppProvider>
+      <AppProvider>{!fontsLoaded ? <Loading /> : <Routes />}</AppProvider>
     </NativeBaseProvider>
   );
 }
