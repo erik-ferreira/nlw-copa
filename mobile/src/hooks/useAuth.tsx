@@ -3,6 +3,8 @@ import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
 
+import { api } from "../services/api";
+
 WebBrowser.maybeCompleteAuthSession();
 
 import { ProviderProps } from "./types";
@@ -45,8 +47,28 @@ export function AuthProvider({ children }: ProviderProps) {
     }
   }
 
-  async function signInWithGoogle(accessToken: string) {
-    console.log("token", accessToken);
+  async function signInWithGoogle(access_token: string) {
+    try {
+      setIsUserLoading(true);
+
+      const tokenResponse = await api.post("/users", { access_token });
+
+      if (tokenResponse.status === 200) {
+        // to insert token in request
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${tokenResponse.data?.token}`;
+
+        const userInfoResponse = await api.get("/me");
+
+        setUser(userInfoResponse.data?.user);
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      setIsUserLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -58,10 +80,7 @@ export function AuthProvider({ children }: ProviderProps) {
   return (
     <AuthContext.Provider
       value={{
-        user: {
-          name: "Erik Ferreira",
-          avatarUrl: "https://github.com/erik-ferreira.png",
-        },
+        user,
         signIn,
         isUserLoading,
       }}
