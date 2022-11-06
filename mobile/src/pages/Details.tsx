@@ -87,10 +87,10 @@ export function Details() {
             />
           </HStack>
 
-          <Guesses poolId={pool.id} />
+          <Guesses poolId={pool.id} code={pool.code} />
         </VStack>
       ) : (
-        <EmptyMyPoolList code={pool?.code} onShare={handleCodeShare} />
+        <EmptyMyPoolList code={pool?.code} />
       )}
     </VStack>
   );

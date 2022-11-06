@@ -3,13 +3,16 @@ import { FlatList, useToast } from "native-base";
 
 import { api } from "../services/api";
 
+import { Loading } from "./Loading";
 import { Game, GameProps } from "./Game";
+import { EmptyMyPoolList } from "./EmptyMyPoolList";
 
 interface Props {
   poolId: string;
+  code: string;
 }
 
-export function Guesses({ poolId }: Props) {
+export function Guesses({ poolId, code }: Props) {
   const toast = useToast();
 
   const [games, setGames] = useState<GameProps[]>([]);
@@ -37,11 +40,46 @@ export function Guesses({ poolId }: Props) {
     }
   }
 
+  async function handleGuessConfirm(gameId: string) {
+    try {
+      if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
+        return toast.show({
+          title: "Informe o placar do palpite",
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+
+      await api.post(`/pools/${poolId}/games/${gameId}/guesses`, {
+        firstTeamPoints: Number(firstTeamPoints),
+        secondTeamPoints: Number(secondTeamPoints),
+      });
+
+      toast.show({
+        title: "Palpite realizado com sucesso!",
+        placement: "top",
+        bgColor: "green.500",
+      });
+
+      getGames();
+    } catch (error) {
+      console.log(error);
+
+      toast.show({
+        title: "Não foi possível enviar o palpite",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
   useEffect(() => {
     getGames();
   }, [poolId]);
 
-  return (
+  return isLoadingGames ? (
+    <Loading />
+  ) : (
     <FlatList
       data={games}
       keyExtractor={(item) => item.id}
@@ -50,13 +88,12 @@ export function Guesses({ poolId }: Props) {
           data={item}
           setFirstTeamPoints={setFirstTeamPoints}
           setSecondTeamPoints={setSecondTeamPoints}
-          onGuessConfirm={() => {}}
+          onGuessConfirm={() => handleGuessConfirm(item.id)}
         />
       )}
-      // ListEmptyComponent={() => <EmptyPoolList />}
-      // showsVerticalScrollIndicator={false}
+      ListEmptyComponent={() => <EmptyMyPoolList code={code} />}
+      showsVerticalScrollIndicator={false}
       _contentContainerStyle={{ pb: "24" }}
-      // px="5"
     />
   );
 }

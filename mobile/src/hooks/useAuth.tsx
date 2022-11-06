@@ -27,8 +27,7 @@ export function AuthProvider({ children }: ProviderProps) {
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId:
-      "632240029735-t4qtfjc4rm9aumbm8fik5nmbkig7s3po.apps.googleusercontent.com",
+    clientId: process.env.GOOGLE_CLIENT_ID,
     redirectUri: "https://auth.expo.io/@erik_ferreira/nlwcopamobileerik",
     scopes: ["profile", "email"],
   });
